@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Space Adventure Game</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Interactive Rocket Survival Game</p>
+        <h1>Space Adventure</h1>
+        <p class="intro">
+          Dodge asteroid storms, sweep up starlight, and keep your rocket alive
+          as the galaxy gets faster and fiercer.
+        </p>
+        <div class="meta">
+          <span>Arrow keys or mouse</span>
+          <span>Collect stars for points</span>
+          <span>Survive the asteroid field</span>
+        </div>
+      </section>
+
+      <section class="game-panel">
+        <header class="hud">
+          <div class="stat">
+            <span class="label">Score</span>
+            <strong id="score">0</strong>
+          </div>
+          <div class="stat">
+            <span class="label">High Score</span>
+            <strong id="high-score">0</strong>
+          </div>
+          <div class="stat">
+            <span class="label">Level</span>
+            <strong id="level">1</strong>
+          </div>
+          <button id="sound-toggle" class="sound-toggle" type="button" aria-pressed="true">
+            Sound On
+          </button>
+        </header>
+
+        <div class="canvas-frame">
+          <canvas id="game-canvas" aria-label="Space adventure game canvas"></canvas>
+
+          <div class="overlay" id="overlay">
+            <div class="card">
+              <p class="card-tag" id="status-tag">Mission Ready</p>
+              <h2 id="status-title">Launch into the starfield</h2>
+              <p id="status-text">
+                Guide your rocket with the arrow keys or your mouse. Grab stars,
+                dodge asteroids, and push for a new high score.
+              </p>
+              <div class="actions">
+                <button id="start-button" class="primary" type="button">Start Game</button>
+                <button id="restart-button" class="secondary" type="button">Restart</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="tips">
+          <div>
+            <h3>Mission Rules</h3>
+            <p>Asteroid hit = game over. Each star adds 10 points.</p>
+          </div>
+          <div>
+            <h3>Bonus Features</h3>
+            <p>High score saving, level ramp-up, shooting stars, flame effects.</p>
+          </div>
+        </footer>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
