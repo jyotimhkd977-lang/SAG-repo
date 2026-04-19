@@ -84,6 +84,28 @@ function initializeAudio() {
   audioCtx = new AudioContextClass();
 }
 
+async function ensureAudioReady() {
+  if (!audioEnabled) {
+    return false;
+  }
+
+  initializeAudio();
+
+  if (!audioCtx) {
+    return false;
+  }
+
+  if (audioCtx.state === "suspended") {
+    try {
+      await audioCtx.resume();
+    } catch {
+      return false;
+    }
+  }
+
+  return audioCtx.state === "running";
+}
+
 function playSound(kind) {
   if (!audioEnabled) {
     return;
@@ -91,7 +113,7 @@ function playSound(kind) {
 
   initializeAudio();
 
-  if (!audioCtx) {
+  if (!audioCtx || audioCtx.state !== "running") {
     return;
   }
 
@@ -712,9 +734,17 @@ function updatePointerPosition(clientX) {
   pointer.x = clientX - rect.left;
 }
 
+function unlockAudioFromGesture() {
+  void ensureAudioReady();
+}
+
 window.addEventListener("resize", resizeCanvas);
+window.addEventListener("pointerdown", unlockAudioFromGesture, { passive: true });
+window.addEventListener("touchstart", unlockAudioFromGesture, { passive: true });
 
 window.addEventListener("keydown", (event) => {
+  unlockAudioFromGesture();
+
   if (event.key === "ArrowLeft" || event.key.toLowerCase() === "a") {
     keys.left = true;
     event.preventDefault();
@@ -777,10 +807,7 @@ canvas.addEventListener("touchend", () => {
 });
 
 function startGame() {
-  if (audioCtx && audioCtx.state === "suspended") {
-    audioCtx.resume();
-  }
-
+  void ensureAudioReady();
   resetGame();
 }
 
@@ -790,6 +817,14 @@ restartButton.addEventListener("click", startGame);
 soundToggle.addEventListener("click", () => {
   audioEnabled = !audioEnabled;
   updateSoundButton();
+
+  if (audioEnabled) {
+    void ensureAudioReady().then((ready) => {
+      if (ready) {
+        playSound("toggle");
+      }
+    });
+  }
 });
 
 resizeCanvas();
